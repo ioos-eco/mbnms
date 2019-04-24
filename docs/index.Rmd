@@ -1,0 +1,72 @@
+---
+title: "Trophic Cascade of Marine Heat Wave in MBNMS"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    storyboard: true
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+```
+
+### Ocean Warms {data-commentary-width=400}
+
+```{r}
+library(tidyverse)
+library(glue)
+
+library(infographiq)
+#devtools::install_github("marinebon/infographiq")
+#devtools::load_all("~/github/infographiq")
+#library(infographiq) 
+
+csv <- here::here("docs/svg-links.csv")
+svg <- "svg/cinms_pelagic.svg"
+
+d <- read_csv(csv) %>% 
+  filter(svg == !!svg)
+
+info_svg(d, svg)
+```
+
+*** 
+
+<!--iframe src="./modals/sst.html" height="100%" width="100%" frameborder="0"></iframe-->
+
+```{r}
+library(tidyverse)
+library(dygraphs)
+library(xts)
+
+csv_tv  = "https://raw.githubusercontent.com/marinebon/info-mb/master/prep/data/MBNMS_GHRSST.csv"
+title   = "Mean Sea Surface Temperature from Satellite"
+y_label = "Deg C"
+col_t   = "Date"
+col_y   = "Mean SST"
+
+d <- read_csv(csv_tv)
+
+x <- select(d, !!col_y) %>%
+  as.xts(order.by=d[[col_t]])
+
+p <- dygraph(x, main=title, width=380) %>% 
+  dySeries(col_y, color='red', strokeWidth=2, label=col_y) %>%
+  dyAxis('y', label=y_label)
+
+p
+```
+
+
+### Algae Blooms {data-commentary-width=400}
+
+```{r}
+"modals/sst.html"
+```
+
+*** 
+
+
+
+
