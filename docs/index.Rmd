@@ -67,6 +67,25 @@ p
 
 *** 
 
+```{r}
+csv_tv  = "https://raw.githubusercontent.com/marinebon/info-mb/master/prep/data/phytoplankton/efm_diatoms_mb_by_year.csv"
+title   = "Pennate Diatom Average Per Year"
+y_label = "(mg C/m3)"
+col_t   = "yr"
+col_y   = "pennate"
+
+d <- read_csv(csv_tv)
+
+x <- select(d, !!col_y) %>%
+  as.xts(order.by=lubridate::year(d[[col_t]]))
+
+p <- dygraph(x, main=title, width=380) %>% 
+  dySeries(col_y, color='red', strokeWidth=2, label=col_y) %>%
+  dyAxis('y', label=y_label)
+
+p
+
+```
 
 
 
